@@ -19,14 +19,14 @@ class ContactRepository extends CoreRepository
         return Model::class;
     }
 
-    public function getAllClient(){
+    public function getAllContact(){
         $contacts = $this->startCondition()
             ->leftjoin('phones', 'contacts.id', '=', 'phones.contact_id')
             ->select('contacts.*', 'phones.phone as phone', 'phones.id as phone_id')
             ->orderBy('contacts.name', 'ASC')
             ->orderBy('contacts.id', 'ASC')
             ->get();
-        return $this->groupByClient($contacts);
+        return $this->groupByContact($contacts);
 
     }
 
@@ -50,10 +50,10 @@ class ContactRepository extends CoreRepository
             ->orderBy('contacts.id', 'ASC')
             ->get();
 
-        return $this->groupByClient($contact);
+        return $this->groupByContact($contact);
     }
 
-    public function groupByClient($contacts){
+    public function groupByContact($contacts){
         $contactGroup = [];
         foreach ($contacts as $contact) {
             if (!isset($contactGroup[$contact->id])) {

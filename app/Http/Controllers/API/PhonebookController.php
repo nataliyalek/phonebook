@@ -21,7 +21,7 @@ class PhonebookController extends BaseController
     public function contacts(Request $request)
     {
 
-        $contacts = $this->contactRepository->getAllClient();
+        $contacts = $this->contactRepository->getAllContact();
         //$clients = Client::all();
         return $this->sendResponse($contacts, 'Contacts Retrieved');
     }
