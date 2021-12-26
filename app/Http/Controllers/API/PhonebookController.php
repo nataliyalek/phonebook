@@ -17,7 +17,18 @@ class PhonebookController extends BaseController
     {
         $this->contactRepository = app(ContactRepository::class);
     }
-
+    /**
+     * @OA\Get(
+     *     path="/contacts",
+     *     summary="Get all contacts",
+     *     tags={"Contacts"},
+     *     description="Get contact by id",
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     ),
+     * )
+     */
     public function contacts(Request $request)
     {
 
@@ -26,6 +37,44 @@ class PhonebookController extends BaseController
         return $this->sendResponse($contacts, 'Contacts Retrieved');
     }
 
+    /**
+     * @OA\Post(
+     *     path="/contacts",
+     *     summary="Create contact",
+     *     tags={"Contacts"},
+     *     description="Create contact",
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="note",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="phones",
+     *                     @OA\Schema(
+     *                          type="array",
+     *                          @OA\Items(
+     *                              type="integer",
+     *                          ),
+     *                      ),
+     *                 ),
+     *
+     *             )
+     *         )
+     *      ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\Schema(ref="#/definitions/Contact"),
+     *     ),
+     * )
+     */
     public function createContact(Request $request)
     {
         $input = $request->all();
@@ -54,6 +103,33 @@ class PhonebookController extends BaseController
 
     }
 
+    /**
+     * @OA\Get(
+     *     path="/contacts/{id}",
+     *     summary="Get contact by id",
+     *     tags={"Contacts"},
+     *     description="Get contact by id",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Contact id",
+     *         required=true,
+     *           @OA\Schema(
+     *           type="integer",
+     *           format="int64"
+     *         )
+      *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\Schema(ref="#/definitions/Contact"),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Contact is not found",
+     *     )
+     * )
+     */
     public function singleContact($id){
         $contact = $this->contactRepository->getOneById($id);
         if (is_null($contact)) {
@@ -63,11 +139,33 @@ class PhonebookController extends BaseController
 
     }
 
+
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\Delete(
+     *     path="/contacts/{id}",
+     *     summary="Delete contact by id",
+     *     tags={"Contacts"},
+     *     description="Delete contact by id",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         description="Contact id",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="array",
+     *           @OA\Items(type="integer"),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\Schema(ref="#/definitions/Contact"),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Contact is not found",
+     *     )
+     * )
      */
     public function deleteContact($id)
     {
@@ -84,12 +182,63 @@ class PhonebookController extends BaseController
 
 
     }
+
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @OA\PUT(
+     *     path="/contacts/{id}",
+     *     summary="Update contact",
+     *     tags={"Contacts"},
+     *     description="Update contact",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Contact id",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="integer",
+     *           format="int64"
+     *         )
+     *     ),
+     *      @OA\Parameter(
+     *         name="name",
+     *         in="query",
+     *         description="Contact name",
+     *         required=true,
+     *         @OA\Schema(
+     *          type="string",
+     *         ),
+     *     ),
+     *     @OA\Parameter(
+     *         name="note",
+     *         in="query",
+     *         description="Contact note",
+     *         required=false,
+     *         @OA\Schema(
+     *          type="string",
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="phones",
+     *         in="query",
+     *         description="Contact phones",
+     *         required=false,
+     *         @OA\Schema(
+     *           type="array",
+     *           @OA\Items(
+     *               type="integer",
+     *           ),
+     *        ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\Schema(ref="#/definitions/Contact"),
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Contact is not found",
+     *     )
+     * )
      */
     public function updateContact (Request $request, int $id){
         //dd($request);

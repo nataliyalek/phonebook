@@ -5,6 +5,12 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+/**
+ * @OA\Info(
+ *     version="1.0",
+ *     title="Example for Phonebook API"
+ * )
+ */
 class BaseController extends Controller
 {
     /**
